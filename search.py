@@ -11,16 +11,13 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
-# coding=utf8
-# -*- coding: utf8 -*-
-# vim: set fileencoding=utf8 :
+
 """
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
 import util
-import pacman
 
 class SearchProblem:
     """
@@ -90,51 +87,12 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    closed = set()
-    fringe = util.Stack()
-    startstate = [(problem.getStartState(), None, 0), []]
-    fringe.push(startstate)
-    while(True): 
-        if fringe.isEmpty():
-            return False
-        node = fringe.pop()
-        if problem.isGoalState(node[0][0]):
-            print node[1]
-            return node[1] 
-        if  node[0][0]  not in closed:
-            closed.add(node[0][0]) 
-            for triple in problem.getSuccessors(node[0][0]):   
-                prevlst = node[1]
-                s = prevlst[:]
-                s.append(triple[1])
-                currstate = [triple, s]
-                print currstate
-                fringe.push(currstate)
+    util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    closed = set()
-    fringe = util.Queue()
-    startstate = [(problem.getStartState(), None, 0), []]
-    fringe.push(startstate)
-    while(True): 
-        if fringe.isEmpty():
-            return False
-        node = fringe.pop()
-        if problem.isGoalState(node[0][0]):
-            print node[1]
-            return node[1] 
-        if  node[0][0]  not in closed:
-            closed.add(node[0][0]) 
-            for triple in problem.getSuccessors(node[0][0]):
-                prevlst = node[1]
-                s = prevlst[:]
-                s.append(triple[1])
-                currstate = [triple, s]
-                print currstate
-                fringe.push(currstate)
-   
+    util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
