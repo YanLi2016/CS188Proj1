@@ -11,13 +11,16 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
-
+# coding=utf8
+# -*- coding: utf8 -*-
+# vim: set fileencoding=utf8 :
 """
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 
 import util
+import pacman
 
 class SearchProblem:
     """
@@ -87,17 +90,75 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    closed = set()
+    fringe = util.Stack()
+    startstate = [(problem.getStartState(), None, 0), []]
+    fringe.push(startstate)
+    while(True): 
+        if fringe.isEmpty():
+            return False
+        node = fringe.pop()
+        if problem.isGoalState(node[0][0]):
+            #print node[1]
+            return node[1] 
+        if  node[0][0]  not in closed:
+            closed.add(node[0][0]) 
+            for triple in problem.getSuccessors(node[0][0]):   
+                prevlst = node[1]
+                s = prevlst[:]
+                s.append(triple[1])
+                currstate = [triple, s]
+                #print currstate
+                fringe.push(currstate)
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    closed = set()
+    fringe = util.Queue()
+    startstate = [(problem.getStartState(), None, 0), []]
+    fringe.push(startstate)
+    while(True): 
+        if fringe.isEmpty():
+            return False
+        node = fringe.pop()
+        if problem.isGoalState(node[0][0]):
+            #print node[1]
+            return node[1] 
+        if  node[0][0]  not in closed:
+            closed.add(node[0][0]) 
+            for triple in problem.getSuccessors(node[0][0]):
+                prevlst = node[1]
+                s = prevlst[:]
+                s.append(triple[1])
+                currstate = [triple, s]
+                #print currstate
+                fringe.push(currstate)
+   
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    closed = set()
+    fringe = util.PriorityQueue()
+    startstate = [(problem.getStartState(), None, 0), []]
+    fringe.push(startstate,0)
+    while(True): 
+        if fringe.isEmpty():
+            return False
+        node = fringe.pop()
+        if problem.isGoalState(node[0][0]):
+            #print node[1]
+            return node[1] 
+        if  node[0][0]  not in closed:
+            closed.add(node[0][0]) 
+            for triple in problem.getSuccessors(node[0][0]):
+                prevlst = node[1]
+                s = prevlst[:]
+                s.append(triple[1])
+                currstate = [triple, s]
+                #print currstate
+                fringe.push(currstate, node[0][2] + triple[2])
 
 def nullHeuristic(state, problem=None):
     """
@@ -109,7 +170,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    closed = set()
+    fringe = util.PriorityQueue()
+    startstate = [(problem.getStartState(), None, 0), []]
+    fringe.push(startstate,0)
+    while(True): 
+        if fringe.isEmpty():
+            return False
+        node = fringe.pop()
+        if problem.isGoalState(node[0][0]):
+            #print node[1]
+            return node[1] 
+        if  node[0][0]  not in closed:
+            closed.add(node[0][0]) 
+            """triple (successor position, action, cost)"""
+            for triple in problem.getSuccessors(node[0][0]):
+                prevlst = node[1]
+                s = prevlst[:]
+                s.append(triple[1])
+                new_triple = (triple[0],  node[0][2] + triple[2] + heuristic(triple[0], problem), triple[2])
+                currstate = [new_triple, s]
+                #print currstate
+                fringe.push(currstate, node[0][2] + triple[2] + heuristic(triple[0], problem))
 
 
 # Abbreviations
