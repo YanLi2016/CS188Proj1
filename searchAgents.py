@@ -288,6 +288,11 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.name = "CornersProblem"
+        #((1,1), (1,top), (right, 1), (right, top))
+        self.startState = (startingGameState.getPacmanPosition(), (1,1,1,1))
+        #print "self start state !!!!!!", self.startState
+
 
     def getStartState(self):
         """
@@ -295,14 +300,19 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #print("got startstate")
+        return self.startState
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        isGoal = False
+        v = (state[1][0] or state[1][1] or state[1][2] or state[1][3])
+        if v == 0: isGoal = True
+        #print("check is goal", state, isGoal)
+        return isGoal
 
     def getSuccessors(self, state):
         """
@@ -315,6 +325,7 @@ class CornersProblem(search.SearchProblem):
             is the incremental cost of expanding to that successor
         """
 
+        #print("getSuccessors in CornersProblem")
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
@@ -325,6 +336,24 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                #print("current state", state[0])
+                nextState = (nextx, nexty)
+                #successors.append( ( nextState, action, 1) )
+
+                last_corners = state[1][:]
+                if (nextx, nexty) in self.corners:
+                    idx = self.corners.index((nextx, nexty))
+                    next_corners = last_corners[:idx] + (0,) + last_corners[idx+1:]
+                    successor = ((nextState, next_corners), action, 1)
+                    #print("corner", last_corners, idx, next_corners)
+                else:
+                    successor = ((nextState, last_corners), action, 1)
+                successors.append(successor)
+                #print("successor", successor)
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -336,6 +365,7 @@ class CornersProblem(search.SearchProblem):
         """
         if actions == None: return 999999
         x,y= self.startingPosition
+
         for action in actions:
             dx, dy = Actions.directionToVector(action)
             x, y = int(x + dx), int(y + dy)
@@ -360,7 +390,17 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    pacpos = state.getPacmanPosition()
+    total = 0
+    d0 = manhattanDistance(pacpos, corners[0])
+    if not state[1][0] : d0 = 0
+    d1 = manhattanDistance(pacpos, corners[1])
+    if not state[1][1] : d1 = 0
+    d2 = manhattanDistance(pacpos, corners[2])
+    if not state[1][2] : d2 = 0
+    d3 = manhattanDistance(pacpos, corners[3])
+    if not state[1][3] : d3 = 0
+    return d0 + d1 + d2 + d3 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -454,7 +494,11 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    total = 0
+    food_cordinates = foodGrid.asList()
+    for cordinate in food_cordinates:
+        total = total + manhattanDistance(position, cordinate)
+    return total
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
