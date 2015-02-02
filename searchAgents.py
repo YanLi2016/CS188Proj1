@@ -293,6 +293,7 @@ class CornersProblem(search.SearchProblem):
         self.startState = (startingGameState.getPacmanPosition(), (1,1,1,1))
         #print "self start state !!!!!!", self.startState
 
+
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
@@ -392,16 +393,16 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    pacpos = state.getPacmanPosition()
+    pacpos = state[0]
     total = 0
-    d0 = manhattanDistance(pacpos, corners[0])
 
+    d0 = util.manhattanDistance(pacpos, corners[0])
     if not state[1][0] : d0 = 0
-    d1 = manhattanDistance(pacpos, corners[1])
+    d1 = util.manhattanDistance(pacpos, corners[1])
     if not state[1][1] : d1 = 0
-    d2 = manhattanDistance(pacpos, corners[2])
+    d2 = util.manhattanDistance(pacpos, corners[2])
     if not state[1][2] : d2 = 0
-    d3 = manhattanDistance(pacpos, corners[3])
+    d3 = util.manhattanDistance(pacpos, corners[3])
     if not state[1][3] : d3 = 0
 
     return d0 + d1 + d2 + d3 # Default to trivial solution
@@ -501,7 +502,7 @@ def foodHeuristic(state, problem):
     total = 0
     food_cordinates = foodGrid.asList()
     for cordinate in food_cordinates:
-        total = total + manhattanDistance(position, cordinate)
+        total = total + util.manhattanDistance(position, cordinate)
     return total
 
 class ClosestDotSearchAgent(SearchAgent):

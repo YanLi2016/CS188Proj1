@@ -99,7 +99,7 @@ def depthFirstSearch(problem):
             return False
         node = fringe.pop()
         if problem.isGoalState(node[0][0]):
-            #print node[1]
+
             return node[1] 
         if  node[0][0]  not in closed:
             closed.add(node[0][0]) 
@@ -108,7 +108,7 @@ def depthFirstSearch(problem):
                 s = prevlst[:]
                 s.append(triple[1])
                 currstate = [triple, s]
-                #print currstate
+
                 fringe.push(currstate)
 
 def breadthFirstSearch(problem):
@@ -123,7 +123,7 @@ def breadthFirstSearch(problem):
             return False
         node = fringe.pop()
         if problem.isGoalState(node[0][0]):
-            #print node[1]
+
             return node[1] 
         if  node[0][0]  not in closed:
             closed.add(node[0][0]) 
@@ -132,17 +132,18 @@ def breadthFirstSearch(problem):
                 s = prevlst[:]
                 s.append(triple[1])
                 currstate = [triple, s]
-                #print currstate
+
                 fringe.push(currstate)
    
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
+
     closed = set()
     fringe = util.PriorityQueue()
-    startstate = [(problem.getStartState(), None, 0), []]
-    fringe.push(startstate,0)
+    startstate = [(problem.getStartState(), None, 0), [], 0]
+    fringe.push(startstate, startstate[2])
+
     while(True): 
         if fringe.isEmpty():
             return False
@@ -156,9 +157,12 @@ def uniformCostSearch(problem):
                 prevlst = node[1]
                 s = prevlst[:]
                 s.append(triple[1])
-                currstate = [triple, s]
-                #print currstate
-                fringe.push(currstate, node[0][2] + triple[2])
+
+                currstate = [triple, s, node[2] + triple[2]]
+               
+                fringe.push(currstate, currstate[2])
+    
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -172,8 +176,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     closed = set()
     fringe = util.PriorityQueue()
-    startstate = [(problem.getStartState(), None, 0), []]
-    fringe.push(startstate,0)
+
+    h = heuristic(problem.getStartState(), problem)
+    startstate = [(problem.getStartState(), None, 0), [], 0]
+    fringe.push(startstate, startstate[2]+h)
+
     while(True): 
         if fringe.isEmpty():
             return False
@@ -183,15 +190,14 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             return node[1] 
         if  node[0][0]  not in closed:
             closed.add(node[0][0]) 
-            """triple (successor position, action, cost)"""
             for triple in problem.getSuccessors(node[0][0]):
+                hh = heuristic(triple[0], problem)
                 prevlst = node[1]
                 s = prevlst[:]
                 s.append(triple[1])
-                new_triple = (triple[0],  node[0][2] + triple[2] + heuristic(triple[0], problem), triple[2])
-                currstate = [new_triple, s]
-                #print currstate
-                fringe.push(currstate, node[0][2] + triple[2] + heuristic(triple[0], problem))
+                currstate = [triple, s, node[2] + triple[2] ]
+               
+                fringe.push(currstate, currstate[2] + hh)
 
 
 # Abbreviations
