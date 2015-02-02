@@ -90,7 +90,6 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    print("bfs on ", problem.name)
     closed = set()
     fringe = util.Stack()
     startstate = [(problem.getStartState(), None, 0), []]
