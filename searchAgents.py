@@ -536,10 +536,7 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
         #self.searchType = AnyFoodSearchProblem
-        
-        
 
-        "*** YOUR CODE HERE ***"
         
         return search.uniformCostSearch(problem)
 
@@ -575,12 +572,6 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-        # for direction in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-        #     x,y = state
-        #     dx, dy = Actions.directionToVector(direction);
-        #     nextx, nexty = int(x + dx), int(y + dy);
-       
-        
         return self.food[x][y] == True 
 
 def mazeDistance(point1, point2, gameState):
