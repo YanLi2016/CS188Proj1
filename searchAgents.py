@@ -300,7 +300,7 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        #print("got startstate")
+
         return self.startState
 
     def isGoalState(self, state):
@@ -308,10 +308,12 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
+
         isGoal = False
         v = (state[1][0] or state[1][1] or state[1][2] or state[1][3])
         if v == 0: isGoal = True
         #print("check is goal", state, isGoal)
+
         return isGoal
 
     def getSuccessors(self, state):
@@ -336,6 +338,7 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+
             x,y = state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
@@ -392,6 +395,7 @@ def cornersHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     pacpos = state[0]
     total = 0
+
     d0 = util.manhattanDistance(pacpos, corners[0])
     if not state[1][0] : d0 = 0
     d1 = util.manhattanDistance(pacpos, corners[1])
@@ -400,6 +404,7 @@ def cornersHeuristic(state, problem):
     if not state[1][2] : d2 = 0
     d3 = util.manhattanDistance(pacpos, corners[3])
     if not state[1][3] : d3 = 0
+
     return d0 + d1 + d2 + d3 # Default to trivial solution
 
 class AStarCornersAgent(SearchAgent):
