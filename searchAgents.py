@@ -502,11 +502,59 @@ def foodHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     total = 0
     food_cordinates = foodGrid.asList()
+    #food = len(food_cordinates)
     maxh = 0; 
+    # for cordinate in food_cordinates:
+    #     if util.manhattanDistance(position, cordinate) > maxh:
+    #         maxh = util.manhattanDistance(position, cordinate)
     for cordinate in food_cordinates:
-        if util.manhattanDistance(position, cordinate) > maxh:
-            maxh = util.manhattanDistance(position, cordinate)
-    return maxh
+        if fooddistance(problem, position, cordinate) > maxh:
+            maxh = fooddistance(problem, position, cordinate)
+    return maxh 
+
+
+def fooddistance(problem, xy1, xy2):
+    cost = util.manhattanDistance(xy1, xy2)
+    #print "yo", problem.walls
+    walls = problem.walls
+    
+    x1 = xy1[0]
+    y1 = xy1[1]
+    x2 = xy2[0]
+    y2 = xy2[1]
+    a, b, c, d = 0, 0, 0, 0 
+    # af, bf, cf, df = 0, 0, 0, 0
+    # food_num = len(foodg.asList())
+
+    for x in range(min(x1,x2), max(x1,x2)):
+        if walls[x][y1]:
+            a = a + 1
+        # if foodg[x][y1]:
+        #     af +=1
+        if walls[x][y2]:
+            b = b + 1
+        # if foodg[x][y2]:  
+        #     bf = bf +1   
+    for y in range(min(y1, y2), max(y1, y2)):
+        if walls[x1][y]:
+            c = c + 1
+        # if foodg[x1][y]:
+        #     cf += 1
+        if walls[x2][y]:
+            d = d + 1
+        # if foodg[x2][y]:
+        #     df +=1 
+    #print   food_num
+   # print  foodg.count() -cf - bf, "blah"
+    #print foodg.count() -af -df, "blahhhhhhhh"
+    #cb = (foodg.count() - (cf + bf))
+    #ad = (foodg.count() - (af + df))
+    one = (c + b + cost) 
+    two = (a + d + cost) 
+    return min(one, two)
+
+
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
